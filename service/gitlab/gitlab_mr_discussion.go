@@ -3,6 +3,7 @@ package gitlab
 import (
 	"context"
 	"fmt"
+	"log"
 	"path/filepath"
 	"sync"
 
@@ -117,6 +118,9 @@ func (g *GitLabMergeRequestDiscussionCommenter) postCommentsForEach(ctx context.
 			}
 			_, _, err := g.cli.Discussions.CreateMergeRequestDiscussion(g.projects, g.pr, discussion)
 			if err != nil {
+				if err, ok := err.(*gitlab.ErrorResponse); ok {
+					log.Printf("failed to create merge request discussion. response:\n%s", err.Body)
+				}
 				return fmt.Errorf("failed to create merge request discussion: %v", err)
 			}
 			return nil
