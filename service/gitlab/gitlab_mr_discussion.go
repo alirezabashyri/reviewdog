@@ -2,6 +2,7 @@ package gitlab
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"path/filepath"
@@ -98,6 +99,8 @@ func (g *GitLabMergeRequestDiscussionCommenter) postCommentsForEach(ctx context.
 		return err
 	}
 
+	postedcs.DebugLog()
+
 	var eg errgroup.Group
 	for _, c := range g.postComments {
 		comment := c
@@ -119,7 +122,8 @@ func (g *GitLabMergeRequestDiscussionCommenter) postCommentsForEach(ctx context.
 			_, _, err := g.cli.Discussions.CreateMergeRequestDiscussion(g.projects, g.pr, discussion)
 			if err != nil {
 				if err, ok := err.(*gitlab.ErrorResponse); ok {
-					log.Printf("failed to create merge request discussion. response:\n%s", err.Body)
+					discussionJSON, _ := json.MarshalIndent(discussion, "", "  ")
+					log.Printf("failed to create merge request discussion. Discussion:\n%s\nResponse:\n%s", discussionJSON, err.Body)
 				}
 				return fmt.Errorf("failed to create merge request discussion: %v", err)
 			}
