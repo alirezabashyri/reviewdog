@@ -39,4 +39,4 @@ Reviewdog:
   script:
     - golint ./... | reviewdog -f=golint -name=golint-discussion -reporter=gitlab-mr-discussion -filter-mode=file
     - golint ./... | reviewdog -f=golint -name=golint-commit -reporter=gitlab-mr-commit
-    - cd ./_testdata/ && golint ./... | reviewdog -f=golint -name=golint-discussion -reporter=gitlab-mr-discussion
+    - cd ./_testdata/ && golint ./... | reviewdog -f=golint -name=golint-discussion-subdir -reporter=gitlab-mr-discussion
