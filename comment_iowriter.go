@@ -9,6 +9,8 @@ import (
 
 var _ CommentService = &RawCommentWriter{}
 
+var ok = 14
+
 // RawCommentWriter is comment writer which writes results to given writer
 // without any formatting.
 type RawCommentWriter struct {
